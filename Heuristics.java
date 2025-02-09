@@ -20,7 +20,14 @@ public class Heuristics {
 	}
 
 	public int manhattan(BoardNode node) {   //second heuristic which uses a goal state to help determined how far argument node tiles are from desired position
-		// TODO - using the general search algorithm, find a way to implement manhattan search to determine how far a node is from their desired position
+		int result = 0;
+		int [][]state = node.getMatrix();
+		for(int i=0; i<state.length; i++) {
+			for(int j=0; j<state.length; j++) {
+				int value = state[i][j];
+				result += Math.abs(i - node.getRow(value)) + Math.abs(j - node.getCol(value)); 
+			}
+		}
 		// Use this as a small helper
 		return result;
 	}
