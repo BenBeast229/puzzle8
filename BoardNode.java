@@ -150,8 +150,12 @@ public class BoardNode {
 		this.cost = i;
 	}
 	public void setMaxCost(int i) {
-		this.maxCost = this.getParent().getMaxCost() + i; //setting MaxCost
-	}
+		if (this.getParent() != null) {
+			this.maxCost = Math.min(this.getParent().getMaxCost() + i, this.maxCost);
+		} else {
+			this.maxCost = i;
+		}
+	}	
 	
 	public int getMaxCost() { //getting the current MaxCode to get to current Node
 		return maxCost;

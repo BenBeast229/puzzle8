@@ -48,7 +48,11 @@ info.pQueue.add(node);
 while(!(info.pQueue.isEmpty())) {
 node = info.pQueue.poll();
 info.incTime();
+
+if (!info.visited.containsKey(node.hashCode()) || node.getMaxCost() < info.visited.get(node.hashCode()).getMaxCost()) {
 info.visited.put(node.hashCode(), node);
+}
+
 if(node.isGaol()) {
 PathActions p = new PathActions(initialNode,node,info); // class that creates a path from goal to start Node if goal is reached.
 p.printPath(); // the path is then printed
@@ -58,17 +62,25 @@ return true;
 Successor s = new Successor(); // Successor class created to provide next possible moves from current node
 List<BoardNode> list = s.successor(node); // list of potential children
 
-for(BoardNode temp: list) {
-boolean ans = info.visited.containsKey(temp.hashCode()); //Uses temporary node's hashCode to check if it has been expanded or not.
-if(ans==false) { //if it hasn't been expanded then we can now check if there is a node in the Priority Queue with a higher Cost
-if(!(info.pQueue.contains(temp))){
+for (BoardNode temp : list) {
+// Check if node has been visited or if there's a better path
+if (!info.visited.containsKey(temp.hashCode()) || temp.getMaxCost() < info.visited.get(temp.hashCode()).getMaxCost()) {
+info.visited.put(temp.hashCode(), temp);
+
+// Ensure the priority queue always holds the best path
+if (!info.visited.containsKey(temp.hashCode()) || temp.getMaxCost() < info.visited.get(temp.hashCode()).getMaxCost()) {
+info.visited.put(temp.hashCode(), temp);
+if (info.pQueue.contains(temp)) {
+info.pQueue.remove(temp);
+}
+info.pQueue.add(temp);
+}
+
 info.pQueue.add(temp);
 info.pQueueSize();
 }
-
-
 }
-}
+
 }
 
 return false;
