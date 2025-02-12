@@ -118,7 +118,7 @@ public class BoardNode {
 	
 	public boolean isGaol() {	//checking if node is goal node
 		boolean result = false;
-		int [][] goal = {{1,2,3},{8,0,4},{7,6,5}};
+		int [][] goal = {{1,2,3},{4,5,6},{7,8,0}};
 		BoardNode goalNode = new BoardNode(goal);
 		result = this.equals(goalNode);
 		return result;

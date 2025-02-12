@@ -1,4 +1,5 @@
 package puzzle8;
+
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -12,11 +13,8 @@ public class Solver {
 
 		// search waiting to be initialized
 		Search search = null;
-		
-		// Simple UI which prompts the User for an algorithm and difficulty level
-		boolean con = true;
 
-	while(con==true){  //the loop keeps going till User says no more to using the solver
+		//Beginning of interface
 		System.out.println();
 		System.out.println("Welcome to 8 puzzle"); //Below are the options asking User for which search and what difficulty to pick
 		System.out.println("Enter tiles in order going from top left all the way to bottom right going across (with 0 being the empty tile)");
@@ -58,40 +56,33 @@ public class Solver {
 		
 		switch(input) { //switch is used to determine what search and difficulty to use
 			
-		case 1:							
-			search = new UniformCost(userNode);
-			
-		case 2:  //final case for A* which provides options for both Heuristics
-			System.out.println();
-			System.out.println("This is the A* algorithm, please pick a heuristic: ");
-			System.out.println();
-			System.out.println("1. Misplaced Tiles");
-			System.out.println("2. Manhattan");
-			System.out.println();
-			int input2 = scanner.nextInt();
-			
-			switch(input2){	// third switch that chooses which A* algorithm to use		
-				case 1: 
-					search = new Astar(userNode,1);
-				case 2:
-					search = new Astar(userNode,2);
-			}
-					
+			case 1:							
+				search = new UniformCost(userNode);
+				break;
+				
+			case 2:  //final case for A* which provides options for both Heuristics
+				System.out.println();
+				System.out.println("This is the A* algorithm, please pick a heuristic: ");
+				System.out.println();
+				System.out.println("1. Misplaced Tiles");
+				System.out.println("2. Manhattan");
+				System.out.println();
+				int input2 = scanner.nextInt();
+				
+				switch(input2){	// third switch that chooses which A* algorithm to use		
+					case 1: 
+						search = new Astar(userNode,1);
+						break;
+					case 2:
+						search = new Astar(userNode,2);
+						break;
+				}
+				break;
 		}
 		
 		System.out.println("Okay! Ready to Go!");
-		System.out.println("Hit any key!"); // prompt to begin search 
-		System.out.println();
 		System.out.println("The search will begin: ");
 		search.search(); //the search starts
-		System.out.println("Do you want to continue?");
-		System.out.println();
-		System.out.println("1. Yes");
-		System.out.println("2. No");
-		int input5 = scanner.nextInt();
-		if(input5==2) {
-			con = false; // ends the program 
-		}	
-	}	
+		scanner.close();
 	}
 }

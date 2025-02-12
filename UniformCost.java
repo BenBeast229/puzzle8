@@ -11,6 +11,7 @@ public class UniformCost implements Search {
 	}
 	
 	private class gComparator implements Comparator<BoardNode>{
+		
 		public int compare(BoardNode a, BoardNode b) {
 			return a.getMaxCost() - b.getMaxCost();
 		}
@@ -18,6 +19,7 @@ public class UniformCost implements Search {
 	
 	public boolean search() {
 		//UnifromCost search which creates a priority queue which sorts according to g(n)
+
 		Info info = new Info();
 		info.makePQueue(new gComparator()); //making a priority queue with gComparator
 		BoardNode node = initialNode;

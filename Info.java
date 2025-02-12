@@ -28,7 +28,6 @@ public class Info {
 		visited = new HashMap<Integer,BoardNode>();	
 	}
 	
-	// TODO - FIX "Comparator is a raw type" warning
 	public void  makePQueue(Comparator c) {   //creates a prioirty queue with a comparator as an argument to decidee the order in which the queue will organize elements
 		pQueue = new PriorityQueue<BoardNode>(c);
 	}
