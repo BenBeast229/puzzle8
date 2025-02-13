@@ -3,33 +3,33 @@ import copy
 import time
 
 class EightPuzzleState: # Class to represent a state of the 8-puzzle problem. It initializes the 8 puzzle with all it's parents and children along with the depth and cost of the state.
-    def __initialize_puzzle(node, board, parent=None, move=None, depth=0, cost=0):
-        node.board = board
-        node.parent = parent
-        node.move = move
-        node.depth = depth
-        node.cost = cost
-        node.zero_pos = node.find_zero()  # Finds the position of the empty space (0)
+    def __init__(self, board, parent=None, move=None, depth=0, cost=0):
+        self.board = board
+        self.parent = parent
+        self.move = move
+        self.depth = depth
+        self.cost = cost
+        self.zero_pos = self.find_zero() # Finds the position of the empty space (0)
     
     # Finds the position of the empty space (0) in the board
-    def find_zero(node):
+    def find_zero(self):
         for i in range(3):
             for j in range(3):
-                if node.board[i][j] == 0:
+                if self.board[i][j] == 0:
                     return (i, j)
         return None
-
+    
     # Defines the less-than operator for comparing states based on cost
-    def __lt__(node, other):
-        return node.cost < other.cost
+    def __lt__(self, other):
+        return self.cost < other.cost
     
     # Defines the equality operator for comparing states based on the board configuration
-    def __eq__(node, other):
-        return node.board == other.board
+    def __eq__(self, other):
+        return self.board == other.board
     
     # Defines the hash function for states based on the board configuration
-    def __hash__(node):
-        return hash(str(node.board))
+    def __hash__(self):
+        return hash(str(self.board))
 
 # Counts the number of misplaced tiles compared to the goal state using misplace tiled search and uses that to find the path to the goal state. 
 def misplaced_tile_heuristic(state, goal):
@@ -58,11 +58,11 @@ def uniform_cost_search(state, goal):
 
 # Function to generate all possible valid moves from the current state
 def get_neighbors(state):
-    possible_moves = {'Up': (-1, 0), 'Down': (1, 0), 'Left': (0, -1), 'Right': (0, 1)} # Defines all possible moves the tiles can take
+    moves = {'Up': (-1, 0), 'Down': (1, 0), 'Left': (0, -1), 'Right': (0, 1)} # Defines all possible moves the tiles can take
     neighbors = [] # List to store all the neighbors
     x, y = state.zero_pos
     
-    for move, (dx, dy) in possible_moves.items():
+    for move, (dx, dy) in moves.items():
         nx, ny = x + dx, y + dy # Calculates the new position after the move
         if 0 <= nx < 3 and 0 <= ny < 3:
             # Create a shallow copy of the board
@@ -82,6 +82,7 @@ def general_search(search_problem, algorithm):
     start_time = time.time()
     max_cost = 0
     last_depth = -1
+    nodes_traversed = 0  # Initialize node counter
     
     #Base case if the initial state is the goal state
     if search_problem.board == [[1, 2, 3], [4, 5, 6], [7, 8, 0]]:
@@ -89,15 +90,19 @@ def general_search(search_problem, algorithm):
         print("Initial state is the goal state:")
         for row in search_problem.board:
             print(row)
-        print(f"Depth: {search_problem.depth}, Cost: {search_problem.cost}, Max Cost: {max_cost}\n")
+        print(f"Depth: {search_problem.depth}, Cost: {search_problem.cost}, Max Cost: {max_cost}")
+        print(f"Solution found in {end_time - start_time:.4f} seconds")
+        print(f"Nodes traversed: {nodes_traversed}")
         return solution_found(search_problem, end_time - start_time)
     
     while priority_queue: # Loop until the priority queue is empty
         _, current_state = heapq.heappop(priority_queue) # Pop the state with the lowest cost
+        nodes_traversed += 1  # Increment node counter
         
         # Recursive base case to end recursive calls
         if current_state.board == [[1, 2, 3], [4, 5, 6], [7, 8, 0]]:
             end_time = time.time()
+            print(f"Nodes traversed: {nodes_traversed}")
             return solution_found(current_state, end_time - start_time)
         
         board_tuple = tuple(tuple(row) for row in current_state.board) # Convert the board to a tuple for hashing
@@ -117,6 +122,7 @@ def general_search(search_problem, algorithm):
                     print(row)
                 print(f"Depth: {neighbor.depth}, Cost: {neighbor.cost}, Max Cost: {max_cost}\n")
     
+    print(f"Nodes traversed: {nodes_traversed}")
     return None
 
 # helper function that takes the path from the solution and creates a local new puzzle with the updated moves and prints the final solution.
@@ -188,6 +194,7 @@ def main():
         return
     
     print(f"Solving using {algorithm} algorithm:")
-    solution = solve_puzzle(eight_puzzle_grid, algorithm) # Calls the solve_puzzle function and begins the search      
+    solution = solve_puzzle(eight_puzzle_grid, algorithm) # Calls the solve_puzzle function and begins the search
+    
 if __name__ == "__main__":
     main()
